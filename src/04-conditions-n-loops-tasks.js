@@ -128,7 +128,8 @@ function isTriangle(a, b, c) {
  *
  */
 function doRectanglesOverlap(rect1, rect2) {
-  if ((rect1.height - rect2.left >= 0) && (rect1.width - rect2.top >= 0)) { return true; }
+  if ((rect1.top + rect1.height > rect2.top)
+  && (rect1.left + rect1.width > rect2.left)) { return true; }
   return false;
 }
 
@@ -159,8 +160,9 @@ function doRectanglesOverlap(rect1, rect2) {
  *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
  *
  */
-function isInsideCircle(/* circle, point */) {
-  throw new Error('Not implemented');
+function isInsideCircle(circle, point) {
+  return (((point.x - circle.center.x) * (point.x - circle.center.x) + (point.y - circle.center.y)
+   * (point.y - circle.center.y)) < (circle.radius * circle.radius));
 }
 
 
@@ -202,8 +204,14 @@ function findFirstSingleChar(/* str */) {
  *   5, 3, true, true   => '[3, 5]'
  *
  */
-function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
-  throw new Error('Not implemented');
+function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
+  const array = [];
+  if (a > b) { array.push(b); array.push(', '); array.push(a); } else {
+    array.push(a); array.push(', '); array.push(b);
+  }
+  if (isStartIncluded === true) { array.unshift('['); } else { array.unshift('('); }
+  if (isEndIncluded === true) { array.push(']'); } else { array.push(')'); }
+  return array.join('');
 }
 
 
@@ -219,8 +227,10 @@ function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
  * 'rotator' => 'rotator'
  * 'noon' => 'noon'
  */
-function reverseString(/* str */) {
-  throw new Error('Not implemented');
+function reverseString(str) {
+  const array = [];
+  for (let i = str.length - 1; i >= 0; i -= 1) { array.push(str[i]); }
+  return array.join('');
 }
 
 
@@ -236,8 +246,11 @@ function reverseString(/* str */) {
  *   87354 => 45378
  *   34143 => 34143
  */
-function reverseInteger(/* num */) {
-  throw new Error('Not implemented');
+function reverseInteger(num) {
+  const result = num.toString();
+  const array = [];
+  for (let i = result.length - 1; i >= 0; i -= 1) { array.push(result[i]); }
+  return array.join('');
 }
 
 
@@ -279,8 +292,21 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  let counter = 0;
+  const str = num.toString();
+  for (let i = 0; i < str.length; i += 1) {
+    counter += Number(str[i]);
+  }
+  counter = Number(counter);
+  if (counter > 9) {
+    const count = counter.toString();
+    counter = 0;
+    for (let j = 0; j < count.length; j += 1) {
+      counter += Number(count[j]);
+    }
+  }
+  return counter;
 }
 
 
